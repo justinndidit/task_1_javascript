@@ -25,18 +25,15 @@ function getUserDetailsAndGreet(request, response) {
         const weatherApiToken = (_e = process.env.weatherApiToken) === null || _e === void 0 ? void 0 : _e.toString();
         const ipInfoUrl = `https://${ipInfoBaseUrl}/${userIp}?token=${ipInfoToken}`;
         try {
-            // Fetch IP information
             const ipInfoResponse = yield axios_1.default.get(ipInfoUrl);
             const ipInfoData = ipInfoResponse.data;
-            // Extract location data
+            // console.log(ipInfoData);
             let locationData = ((_f = ipInfoData === null || ipInfoData === void 0 ? void 0 : ipInfoData.loc) === null || _f === void 0 ? void 0 : _f.split(" ")) || ["6.5244", "3.3792"];
             const city = ipInfoData.city || "Lagos";
-            // Fetch weather information
-            //'https://api.tomorrow.io/v4/weather/forecast?location=42.3478,-71.0466&apikey=8aIvSGpdvuOF1hFBuiHz4Ca1HZtrJ8hG'
             const weatherApiUrl = `${weatherApiBaseUrl}?location=${locationData[0]},${locationData[1]}&apikey=${weatherApiToken}`;
             const weatherApiResponse = yield axios_1.default.get(weatherApiUrl);
+            // console.log(weatherApiResponse);
             const weatherData = weatherApiResponse.data.timelines.minutely[0].values.temperature;
-            // Combine IP info and weather data for the response
             const greeting = `Hello, ${visitorName}!, the temperature is ${weatherData} degrees Celcius in ${city}`;
             const responseData = {
                 client_ip: userIp,
@@ -47,7 +44,7 @@ function getUserDetailsAndGreet(request, response) {
         }
         catch (error) {
             console.error(error.message);
-            response.status(500).send("Internal Server Error");
+            response.status(500).send(error);
         }
     });
 }
