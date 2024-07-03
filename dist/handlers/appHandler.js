@@ -14,23 +14,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserDetailsAndGreet = getUserDetailsAndGreet;
 const axios_1 = __importDefault(require("axios"));
+//test
 function getUserDetailsAndGreet(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
-        var _a, _b, _c, _d, _e, _f;
+        var _a, _b;
         const visitorName = request.query.visitor_name;
         const userIp = (_a = request.socket.remoteAddress) === null || _a === void 0 ? void 0 : _a.toString();
-        const ipInfoBaseUrl = (_b = process.env.ipAddressBaseUrl) === null || _b === void 0 ? void 0 : _b.toString();
-        const ipInfoToken = (_c = process.env.ipAddressApiToken) === null || _c === void 0 ? void 0 : _c.toString();
-        const weatherApiBaseUrl = (_d = process.env.weatherApiBaseUrl) === null || _d === void 0 ? void 0 : _d.toString();
-        const weatherApiToken = (_e = process.env.weatherApiToken) === null || _e === void 0 ? void 0 : _e.toString();
-        const ipInfoUrl = `https://${ipInfoBaseUrl}/${userIp}?token=${ipInfoToken}`;
+        // const ipInfoBaseUrl = process.env.ipAddressBaseUrl?.toString();
+        // const ipInfoToken = process.env.ipAddressApiToken?.toString();
+        // const weatherApiBaseUrl = process.env.weatherApiBaseUrl?.toString();
+        // const weatherApiToken = process.env.weatherApiToken?.toString();
+        //This is bad
+        const weatherApiBaseUrl = "https://api.tomorrow.io/v4/weather/forecast";
+        const weatherApiToken = "cz10yWbD2RPNm0h8V8qZeCR6bMbbTnvj";
+        // const ipAddressBaseUrl="ipinfo.io/";
+        // const ipAddressApiToken="2b6d7978deef20";
+        const ipInfoUrl = `https://ipinfo.io/${userIp}?token=2b6d7978deef20`;
         try {
             const ipInfoResponse = yield axios_1.default.get(ipInfoUrl);
             const ipInfoData = ipInfoResponse.data;
-            // console.log(ipInfoData);
-            let locationData = ((_f = ipInfoData === null || ipInfoData === void 0 ? void 0 : ipInfoData.loc) === null || _f === void 0 ? void 0 : _f.split(" ")) || ["6.5244", "3.3792"];
+            let locationData = ((_b = ipInfoData === null || ipInfoData === void 0 ? void 0 : ipInfoData.loc) === null || _b === void 0 ? void 0 : _b.split(" ")) || ["6.5244", "3.3792"];
+            const long = locationData[0] || "6.5244";
+            const lat = locationData[1] || "3.3792";
             const city = ipInfoData.city || "Lagos";
-            const weatherApiUrl = `${weatherApiBaseUrl}?location=${locationData[0]},${locationData[1]}&apikey=${weatherApiToken}`;
+            //'https://api.tomorrow.io/v4/weather/forecast?location=new%20york&apikey=cz10yWbD2RPNm0h8V8qZeCR6bMbbTnvj'
+            const weatherApiUrl = `${weatherApiBaseUrl}?location=${city}&apikey=${weatherApiToken}`;
             const weatherApiResponse = yield axios_1.default.get(weatherApiUrl);
             // console.log(weatherApiResponse);
             const weatherData = weatherApiResponse.data.timelines.minutely[0].values.temperature;
