@@ -14,11 +14,11 @@ export async function getUserDetailsAndGreet(request: Request, response: Respons
     //This is bad
     const weatherApiBaseUrl="https://api.tomorrow.io/v4/weather/forecast";
     const weatherApiToken="cz10yWbD2RPNm0h8V8qZeCR6bMbbTnvj";
-    const ipAddressBaseUrl="ipinfo.io/";
-    const ipAddressApiToken="2b6d7978deef20";
+    // const ipAddressBaseUrl="ipinfo.io/";
+    // const ipAddressApiToken="2b6d7978deef20";
 
 
-    const ipInfoUrl: string = `https://${ipAddressBaseUrl}/${userIp}?token=${ipAddressApiToken}`;
+    const ipInfoUrl: string = `https://ipinfo.io/${userIp}?token=2b6d7978deef20`;
 
     try {
     
