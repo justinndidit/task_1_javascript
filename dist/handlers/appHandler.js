@@ -18,7 +18,7 @@ const request_ip_1 = __importDefault(require("request-ip"));
 function getUserDetailsAndGreet(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
-        const visitorName = request.query.visitor_name;
+        const visitorName = request.query.visitor_name || "guest";
         const userIp = request_ip_1.default.getClientIp(request);
         const weatherApiToken = (_a = process.env.weatherApiToken) === null || _a === void 0 ? void 0 : _a.toString();
         const weatherApiBaseUrl = "https://api.tomorrow.io/v4/weather/forecast";

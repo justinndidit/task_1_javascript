@@ -3,7 +3,7 @@ import axios from "axios";
 import requestIp from "request-ip";
 
 export async function getUserDetailsAndGreet(request: Request, response: Response) {
-    const visitorName = request.query.visitor_name as string;
+    const visitorName = request.query.visitor_name || "guest" as string;
     const userIp  =   requestIp.getClientIp(request);
     const weatherApiToken = process.env.weatherApiToken?.toString();
 
