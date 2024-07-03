@@ -9,6 +9,7 @@ const express_1 = __importDefault(require("express"));
 const appRoute_1 = __importDefault(require("./routes/appRoute"));
 const port = process.env.PORT || 3000;
 const app = (0, express_1.default)();
+app.set('trust proxy', true);
 app.use("/api/hello", appRoute_1.default);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

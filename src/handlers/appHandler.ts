@@ -1,11 +1,14 @@
 import { Response, Request } from "express";
 import axios from "axios";
+import requestIp from "request-ip";
+
 
 //test
 
 export async function getUserDetailsAndGreet(request: Request, response: Response) {
     const visitorName = request.query.visitor_name as string;
-    const userIp  = request.socket.remoteAddress?.toString();
+    const userIp  =   requestIp.getClientIp(request);
+    //request.socket.remoteAddress?.toString();
     // const ipInfoBaseUrl = process.env.ipAddressBaseUrl?.toString();
     // const ipInfoToken = process.env.ipAddressApiToken?.toString();
     // const weatherApiBaseUrl = process.env.weatherApiBaseUrl?.toString();
