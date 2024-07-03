@@ -2,41 +2,24 @@ import { Response, Request } from "express";
 import axios from "axios";
 import requestIp from "request-ip";
 
-
-//test
-
 export async function getUserDetailsAndGreet(request: Request, response: Response) {
     const visitorName = request.query.visitor_name as string;
     const userIp  =   requestIp.getClientIp(request);
-    //request.socket.remoteAddress?.toString();
-    // const ipInfoBaseUrl = process.env.ipAddressBaseUrl?.toString();
-    // const ipInfoToken = process.env.ipAddressApiToken?.toString();
-    // const weatherApiBaseUrl = process.env.weatherApiBaseUrl?.toString();
-    // const weatherApiToken = process.env.weatherApiToken?.toString();
+    const weatherApiToken = process.env.weatherApiToken?.toString();
 
-    //This is bad
-    const weatherApiBaseUrl="https://api.tomorrow.io/v4/weather/forecast";
-    const weatherApiToken="cz10yWbD2RPNm0h8V8qZeCR6bMbbTnvj";
-    // const ipAddressBaseUrl="ipinfo.io/";
-    // const ipAddressApiToken="2b6d7978deef20";
-
-
-    const ipInfoUrl: string = `https://ipinfo.io/${userIp}?token=2b6d7978deef20`;
+    const weatherApiBaseUrl="https://api.tomorrow.io/v4/weather/forecast";   
+    const ipInfoUrl: string = `http://ip-api.com/json/${userIp}`;
 
     try {
-    
         const ipInfoResponse = await axios.get(ipInfoUrl);
         const ipInfoData = ipInfoResponse.data;
-
-        let locationData = ipInfoData?.loc?.split(" ") || ["6.5244" ,"3.3792"];
-        const long = locationData[0] || "6.5244";
-        const lat = locationData[1] || "3.3792";
+        console.log(ipInfoData);
         const city = ipInfoData.city || "Lagos";
 
         //'https://api.tomorrow.io/v4/weather/forecast?location=new%20york&apikey=cz10yWbD2RPNm0h8V8qZeCR6bMbbTnvj'
         const weatherApiUrl: string = `${weatherApiBaseUrl}?location=${city}&apikey=${weatherApiToken}`;
         const weatherApiResponse = await axios.get(weatherApiUrl);
-        // console.log(weatherApiResponse);
+        
         const weatherData = weatherApiResponse.data.timelines.minutely[0].values.temperature;
 
         const greeting: string = `Hello, ${visitorName}!, the temperature is ${weatherData} degrees Celcius in ${city}`;
@@ -45,7 +28,6 @@ export async function getUserDetailsAndGreet(request: Request, response: Respons
             location: city,
             greeting 
         };
-
         response.status(200).json(responseData);
     } catch (error : any) {
         console.error(error.message);

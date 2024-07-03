@@ -15,34 +15,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserDetailsAndGreet = getUserDetailsAndGreet;
 const axios_1 = __importDefault(require("axios"));
 const request_ip_1 = __importDefault(require("request-ip"));
-//test
 function getUserDetailsAndGreet(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
         const visitorName = request.query.visitor_name;
         const userIp = request_ip_1.default.getClientIp(request);
-        //request.socket.remoteAddress?.toString();
-        // const ipInfoBaseUrl = process.env.ipAddressBaseUrl?.toString();
-        // const ipInfoToken = process.env.ipAddressApiToken?.toString();
-        // const weatherApiBaseUrl = process.env.weatherApiBaseUrl?.toString();
-        // const weatherApiToken = process.env.weatherApiToken?.toString();
-        //This is bad
+        const weatherApiToken = (_a = process.env.weatherApiToken) === null || _a === void 0 ? void 0 : _a.toString();
         const weatherApiBaseUrl = "https://api.tomorrow.io/v4/weather/forecast";
-        const weatherApiToken = "cz10yWbD2RPNm0h8V8qZeCR6bMbbTnvj";
-        // const ipAddressBaseUrl="ipinfo.io/";
-        // const ipAddressApiToken="2b6d7978deef20";
-        const ipInfoUrl = `https://ipinfo.io/${userIp}?token=2b6d7978deef20`;
+        const ipInfoUrl = `http://ip-api.com/json/${userIp}`;
         try {
             const ipInfoResponse = yield axios_1.default.get(ipInfoUrl);
             const ipInfoData = ipInfoResponse.data;
-            let locationData = ((_a = ipInfoData === null || ipInfoData === void 0 ? void 0 : ipInfoData.loc) === null || _a === void 0 ? void 0 : _a.split(" ")) || ["6.5244", "3.3792"];
-            const long = locationData[0] || "6.5244";
-            const lat = locationData[1] || "3.3792";
+            console.log(ipInfoData);
             const city = ipInfoData.city || "Lagos";
             //'https://api.tomorrow.io/v4/weather/forecast?location=new%20york&apikey=cz10yWbD2RPNm0h8V8qZeCR6bMbbTnvj'
             const weatherApiUrl = `${weatherApiBaseUrl}?location=${city}&apikey=${weatherApiToken}`;
             const weatherApiResponse = yield axios_1.default.get(weatherApiUrl);
-            // console.log(weatherApiResponse);
             const weatherData = weatherApiResponse.data.timelines.minutely[0].values.temperature;
             const greeting = `Hello, ${visitorName}!, the temperature is ${weatherData} degrees Celcius in ${city}`;
             const responseData = {
